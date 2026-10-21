@@ -38,7 +38,7 @@ void freeMatrix(int** m, int rows)
   delete[] m;
 }
 
-bool readToDyn(std::ifstream& in, int** matrix, int rows, int cols)
+bool readMatr(std::ifstream& in, int** matrix, int rows, int cols)
 {
   for (int i = 0; i < rows; ++i)
   {
@@ -53,37 +53,37 @@ bool readToDyn(std::ifstream& in, int** matrix, int rows, int cols)
   return true;
 }
 
-void spiralTransform(int** matrix, int rows, int cols)
+void readmaxspiral(int** matrix, int rows, int cols)
 {
-  int top = 0;
-  int bottom = rows - 1;
-  int left = 0;
-  int right = cols - 1;
-  int current_increment = 1;
+  int ups = 0;
+  int downs = rows - 1;
+  int lefts = 0;
+  int rights = cols - 1;
+  int step = 1;
   int total_elements = rows * cols;
 
-  while (current_increment <= total_elements)
+  while (step <= total_elements)
   {
-    for (int i = top; i <= bottom && current_increment <= total_elements; ++i)
+    for (int i = ups; i <= downs && step <= total_elements; ++i)
     {
-      matrix[i][left] += current_increment;
-      current_increment++;
+      matrix[i][lefts] += step;
+      step++;
     }
     left++;
 
-    for (int j = left; j <= right && current_increment <= total_elements; ++j)
+    for (int j = lefts; j <= rights && step <= total_elements; ++j)
     {
-      matrix[bottom][j] += current_increment;
-      current_increment++;
+      matrix[downs][j] += step;
+      step++;
     }
-    bottom--;
+    downs--;
 
-    for (int i = bottom; i >= top && current_increment <= total_elements; --i)
+    for (int i = downs; i >= ups && step <= total_elements; --i)
     {
-      matrix[i][right] += current_increment;
-      current_increment++;
+      matrix[i][rights] += step;
+      step++;
     }
-    right--;
+    rights--;
 
     for (int j = right; j >= left && current_increment <= total_elements; --j)
     {
@@ -112,7 +112,7 @@ int main(int argc, char* argv[])
   std::ifstream input_file(argv[1]);
   if (!input_file.is_open())
   {
-    std::cerr << "Error: Cannot open input file" << std::endl;
+    std::cerr << "Error: Cannot open file" << std::endl;
     return 2;
   }
 
@@ -120,7 +120,7 @@ int main(int argc, char* argv[])
   int cols = 0;
   if (!(input_file >> rows >> cols) || rows < 0 || cols < 0)
   {
-    std::cerr << "Error: Invalid matrix dimensions" << std::endl;
+    std::cerr << "Error: Invalid matrix size" << std::endl;
     return 2;
   }
 
@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  if (!readToDyn(input_file, matrix, rows, cols))
+  if (!readMatr(input_file, matrix, rows, cols))
   {
     std::cerr << "ERROR: bad matrix element" << std::endl;
     freeMatrix(matrix, rows);
@@ -154,7 +154,7 @@ int main(int argc, char* argv[])
   }
   input_file.close();
 
-  spiralTransform(matrix, rows, cols);
+  readmaxspiral(matrix, rows, cols);
 
   std::ofstream output_file(argv[2]);
   if (!output_file.is_open())
