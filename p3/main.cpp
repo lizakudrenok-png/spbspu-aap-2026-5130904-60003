@@ -5,7 +5,7 @@
 
 int** allocateMatrix(int rows, int cols)
 {
-  int** m = new int*[rows]();
+  int** const m = new int*[rows]();
   try
   {
     for (int i = 0; i < rows; ++i)
@@ -60,7 +60,7 @@ void readmaxspiral(int** matrix, int rows, int cols)
   int lefts = 0;
   int rights = cols - 1;
   int step = 1;
-  int total_elements = rows * cols;
+  const int total_elements = rows * cols;
 
   while (step <= total_elements)
   {
@@ -69,7 +69,7 @@ void readmaxspiral(int** matrix, int rows, int cols)
       matrix[i][lefts] += step;
       step++;
     }
-    left++;
+    lefts++;
 
     for (int j = lefts; j <= rights && step <= total_elements; ++j)
     {
@@ -85,12 +85,12 @@ void readmaxspiral(int** matrix, int rows, int cols)
     }
     rights--;
 
-    for (int j = right; j >= left && current_increment <= total_elements; --j)
+    for (int j = rights; j >= lefts && step <= total_elements; --j)
     {
-      matrix[top][j] += current_increment;
-      current_increment++;
+      matrix[ups][j] += step;
+      step++;
     }
-    top++;
+    ups++;
   }
 }
 
@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  std::string num_param = argv[3];
+  const std::string num_param = argv[3];
   if (num_param != "1" && num_param != "2")
   {
     std::cerr << "Error: First parameter must be 1 or 2" << std::endl;
